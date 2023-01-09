@@ -87,8 +87,8 @@ export default function ScanBarcodePage ({navigation}){
             console.log(foodData)
             return foodData;
         }
+        //if barcode null verwijder code nog
         alert("barcode === null")
-        //alert(barcode)
         const foodData = await GetBarCodeInfo(barcode);
         console.log(foodData)
         return foodData;

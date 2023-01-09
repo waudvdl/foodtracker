@@ -24,7 +24,8 @@ export default function SubmenuCard(props){
             case "BUTTON":
                 return(
                     <View style={styles.moreInfoButtonContainer}>
-                        <Pressable onPress={() => {props.navigation.navigate("Food tracking")}} style={styles.moreInfoButton}><Text>More info</Text></Pressable>
+                        {/*<Pressable onPress={() => {props.navigation.navigate("Food tracking")}} style={styles.moreInfoButton}><Text>More info</Text></Pressable>*/}
+                        <Pressable onPress={props.navigation} style={styles.moreInfoButton}><Text>More info</Text></Pressable>
                     </View>
                 );
                 break;

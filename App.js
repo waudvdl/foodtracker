@@ -23,6 +23,9 @@ export default function App() {
     const [kcalGoal, setKcalGoal] = useState(null);
     const [feedingType, setFeedingType] = useState(null);
     const [timestamp, setTimestamp] = useState(null);
+    const [steps, setSteps] = useState(0);
+    const [consumedKcal, setConsumedKcal] = useState(0)
+    const [consumedFoodList, setConsumedFoodList] = useState([])
 
     useEffect(()=>{
         async function getValueOfKey(key){
@@ -38,7 +41,36 @@ export default function App() {
         getValueOfKey("gender").then(setGender)
         getValueOfKey("feeding").then(setFeedingType)
 
+        let now = new Date();
+        let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        setTimestamp(startOfDay / 1000);
+        //getDayStats()
     },[])
+
+    useEffect(()=>{
+        async function getDayStats(){
+            try{
+                const jsonValue = await AsyncStorage.getItem(timestamp+"");
+                if(jsonValue === null){
+                    let data = {
+                        timestamp: timestamp,
+                        data: {steps: 0, consumedKcal: 0, consumedFoodList: []}
+                    };
+
+                    const jsonValue = JSON.stringify(data);
+                    await AsyncStorage.setItem(timestamp+'', jsonValue);
+                    return data;
+                }else{
+                    return JSON.parse(jsonValue);
+                }
+            }catch (e) {
+                console.log(e)
+                alert("something went wrong when retrieving data.")
+            }
+        }
+
+        getDayStats().then(d => {setSteps(d.data.steps); setConsumedKcal(d.data.consumedKcal); setConsumedFoodList(d.data.consumedFoodList)})
+    },[timestamp])
 
     useEffect(()=>{
         if(weight !== null && length !== null && age !== null && gender !== null){
@@ -59,28 +91,19 @@ export default function App() {
         }
     },[weight,length,age,gender])
 
-    let now = new Date();
-    let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    //setTimestamp(startOfDay / 1000);
-    //let newDay = new Date(timestamp*1000)
+    useEffect(() => {
 
-    async function getDayStats(){
-        try{
-            const jsonValue = await AsyncStorage.getItem('timestamp')
-            return jsonValue != null ? JSON.parse(jsonValue) : null;
-        }catch (e) {
-            let data = {timestamp : timestamp}
-            const jsonValue = JSON.stringify(data)
-            await AsyncStorage.setItem(timestamp+'', jsonValue)
-        }
-    }
+    }, [steps])
 
 
-    function HomeScreen({ navigation }) {
+
+    function HomeScreen({navigation}) {
         return (
             <View style={styles.homeView}>
-                <SubmenuCard navigation={navigation} item={{title : "Stappenteller", value : 2380,goal: 6000, type :"LOADING_BAR"}}/>
-                <SubmenuCard navigation={navigation} item={{title : "Food tracker", value : 1500, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>
+                {/*<SubmenuCard navigation={navigation} item={{title : "Stappenteller", value : 2380,goal: 6000, type :"LOADING_BAR"}}/>*/}
+                <SubmenuCard navigation={() => {navigation.navigate("Home")}} item={{title : "Stappenteller", value : 2380,goal: 6000, type :"LOADING_BAR"}}/>
+               {/* <SubmenuCard navigation={navigation} item={{title : "Food tracker", value : 1500, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>*/}
+                <SubmenuCard navigation={() => {navigation.navigate("Food tracking")}} item={{title : "Food tracker", value : 1500, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>
             </View>
         );
     }
