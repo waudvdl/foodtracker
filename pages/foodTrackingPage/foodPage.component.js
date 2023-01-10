@@ -1,11 +1,9 @@
-import {Button, Pressable, Text, View} from "react-native"
-import repo from  "./../../repositories/foodtrackingRepo"
-import GetBarCodeInfo from "./../../repositories/foodtrackingRepo";
+import {Button, Pressable, ScrollView, Text, View} from "react-native"
 import styles from "./styles.foodPage.component"
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Progress from 'react-native-progress';
-//import {RNCamera} from 'react-native-camera';
+import ProgressCircle from "../../components/progressCircle/progressCircle.component";
 
 export default function Foodpage({navigation, route}) {
     const [proteins, setProteins] = useState(0);
@@ -32,7 +30,6 @@ export default function Foodpage({navigation, route}) {
             }
         }
 
-        //console.log(route.params.timestamp)
         getDailyFoodInfo().then(i => {
             try{
                 setProteins(i.data.proteins);
@@ -46,10 +43,13 @@ export default function Foodpage({navigation, route}) {
                 return null
             }
         })
+
+
+
     }, [])
 
     return (
-        <View style={styles.foodpageContainer}>
+        <ScrollView style={styles.foodpageContainer}>
             <View style={styles.graph}>
                 <Text>hier komt een graph die later nog wordt toegevoegd</Text>
             </View>
@@ -60,8 +60,11 @@ export default function Foodpage({navigation, route}) {
                 <Text style={styles.btnText}>Scan an item</Text>
             </Pressable>
             <View style={styles.statsContainer}>
-                <Progress.Circle size={150} progress={0.4} thickness={7} showsText={true} formatText={()=>{return "40%";}}/>
+                {/*<Progress.Circle size={150} progress={0.4} thickness={7} showsText={true} formatText={()=>{return "40%";}}/>*/}
+                <ProgressCircle curValue={kcal} goal={route.params.kcalGoal} text={"Daily kcal intake"}/>
+                <ProgressCircle curValue={proteins} goal={route.params.kcalGoal} text={"Daily protein intake "}/>
+                <ProgressCircle curValue={600} goal={route.params.kcalGoal} text={"Daily kcal intake"}/>
             </View>
-        </View>
+        </ScrollView>
     );
 }

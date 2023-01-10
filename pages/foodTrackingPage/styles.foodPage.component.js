@@ -4,7 +4,7 @@ export default StyleSheet.create({
     foodpageContainer:{
         display: "flex",
         flexDirection:"column",
-        alignItems:"center"
+        //alignItems:"center"
     },
     graph:{
         display: "flex",
@@ -12,7 +12,8 @@ export default StyleSheet.create({
         alignItems: "center",
         width: "100%",
         height: 200,
-        backgroundColor: "#A35"
+        backgroundColor: "#A35",
+        borderBottomWidth: 2,
     },
     scanBtn:{
         display: "flex",
@@ -30,9 +31,13 @@ export default StyleSheet.create({
         textTransform: "uppercase",
         fontWeight:"bold",
         letterSpacing: 1.5,
-        color: "#FEF"
+        color: "#FEF",
+        fontFamily: 'Roboto',
     },
     statsContainer:{
-
+        display: "flex",
+        height: "100%",
+        marginTop:10,
+        marginBottom: 30
     }
 })
