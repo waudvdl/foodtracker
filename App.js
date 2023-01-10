@@ -118,16 +118,16 @@ export default function App() {
     },[weight,length,age,gender])
 
     useEffect(()=>{
-        console.log(steps)
+        //console.log(steps)
     }, [steps])
 
     function HomeScreen({navigation}) {
         return (
             <View style={styles.homeView}>
                 {/*<SubmenuCard navigation={navigation} item={{title : "Stappenteller", value : 2380,goal: 6000, type :"LOADING_BAR"}}/>*/}
-                <SubmenuCard navigation={() => {navigation.navigate("Home")}} item={{title : "Stappenteller", value : steps, goal: 6000, type :"LOADING_BAR"}}/>
+                <SubmenuCard navigation={() => {navigation.navigate("Home")}} item={{title : "Pedometer", value : steps, goal: 6000, type :"LOADING_BAR"}}/>
                {/* <SubmenuCard navigation={navigation} item={{title : "Food tracker", value : 1500, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>*/}
-                <SubmenuCard navigation={() => {navigation.navigate("Food tracking")}} item={{title : "Food tracker", value : consumedKcal, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>
+                <SubmenuCard navigation={() => {navigation.navigate("Food tracking", {timestamp: timestamp})}} item={{timestamp: timestamp, title : "Food tracker", value : consumedKcal, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>
             </View>
         );
     }
