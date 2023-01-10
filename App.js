@@ -24,8 +24,14 @@ export default function App() {
     const [feedingType, setFeedingType] = useState(null);
     const [timestamp, setTimestamp] = useState(null);
     const [steps, setSteps] = useState(0);
-    const [consumedKcal, setConsumedKcal] = useState(0)
-    const [consumedFoodList, setConsumedFoodList] = useState([])
+    //food contains energy and 5 big elements: proteins, fat,carbohydrates, sugar and salt
+    const [consumedKcal, setConsumedKcal] = useState(0);
+    const [proteins, setProteins] = useState(0);
+    const [fat, setFat] = useState(0);
+    const [carbohydrates, setCarbohydrates] = useState(0);
+    const [sugar, setSugar] = useState(0);
+    const [salt, setSalt] = useState(0);
+    const [consumedFoodList, setConsumedFoodList] = useState([]);
 
     useEffect(()=>{
         async function getValueOfKey(key){
@@ -50,26 +56,46 @@ export default function App() {
     useEffect(()=>{
         async function getDayStats(){
             try{
-                const jsonValue = await AsyncStorage.getItem(timestamp+"");
-                if(jsonValue === null){
-                    let data = {
-                        timestamp: timestamp,
-                        data: {steps: 0, consumedKcal: 0, consumedFoodList: []}
-                    };
-
-                    const jsonValue = JSON.stringify(data);
-                    await AsyncStorage.setItem(timestamp+'', jsonValue);
-                    return data;
-                }else{
-                    return JSON.parse(jsonValue);
+                if(timestamp !== null) {
+                    const jsonValue = await AsyncStorage.getItem(timestamp + "");
+                    if (jsonValue === null) {
+                        let data = {
+                            timestamp: timestamp,
+                            data: {
+                                steps: 0,
+                                consumedKcal: 0,
+                                proteins: 0,
+                                fat: 0,
+                                sugar: 0,
+                                salt: 0,
+                                carbohydrates: 0,
+                                consumedFoodList: []
+                            }
+                        };
+                        const jsonValue = JSON.stringify(data);
+                        await AsyncStorage.setItem(timestamp + '', jsonValue);
+                        return data;
+                    } else {
+                        return JSON.parse(jsonValue);
+                    }
                 }
+
             }catch (e) {
                 console.log(e)
-                alert("something went wrong when retrieving data.")
+                //alert("something went wrong when retrieving data.")
             }
         }
 
-        getDayStats().then(d => {setSteps(d.data.steps); setConsumedKcal(d.data.consumedKcal); setConsumedFoodList(d.data.consumedFoodList)})
+        getDayStats().then(d => {
+            try {
+                //console.log(d);
+                setSteps(d.data.steps);
+                setConsumedKcal(d.data.consumedKcal);
+                setConsumedFoodList(d.data.consumedFoodList);
+            }catch (e) {
+                return null;
+            }
+        }).catch()
     },[timestamp])
 
     useEffect(()=>{
@@ -91,19 +117,17 @@ export default function App() {
         }
     },[weight,length,age,gender])
 
-    useEffect(() => {
-
+    useEffect(()=>{
+        console.log(steps)
     }, [steps])
-
-
 
     function HomeScreen({navigation}) {
         return (
             <View style={styles.homeView}>
                 {/*<SubmenuCard navigation={navigation} item={{title : "Stappenteller", value : 2380,goal: 6000, type :"LOADING_BAR"}}/>*/}
-                <SubmenuCard navigation={() => {navigation.navigate("Home")}} item={{title : "Stappenteller", value : 2380,goal: 6000, type :"LOADING_BAR"}}/>
+                <SubmenuCard navigation={() => {navigation.navigate("Home")}} item={{title : "Stappenteller", value : steps, goal: 6000, type :"LOADING_BAR"}}/>
                {/* <SubmenuCard navigation={navigation} item={{title : "Food tracker", value : 1500, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>*/}
-                <SubmenuCard navigation={() => {navigation.navigate("Food tracking")}} item={{title : "Food tracker", value : 1500, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>
+                <SubmenuCard navigation={() => {navigation.navigate("Food tracking")}} item={{title : "Food tracker", value : consumedKcal, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>
             </View>
         );
     }

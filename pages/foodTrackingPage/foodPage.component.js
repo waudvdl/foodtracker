@@ -6,7 +6,12 @@ import {useEffect, useState} from "react";
 //import {RNCamera} from 'react-native-camera';
 
 export default function Foodpage({navigation, props}) {
-
+    const [proteins, setProteins] = useState(0);
+    const [fat, setFat] = useState(0);
+    const [carbohydrates, setCarbohydrates] = useState(0);
+    const [sugar, setSugar] = useState(0);
+    const [salt, setSalt] = useState(0);
+    const [consumedFoodList, setConsumedFoodList] = useState([]);
 
     return (
         <View style={styles.foodpageContainer}>
