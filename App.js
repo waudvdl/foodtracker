@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 //import {Pedometer} from 'pages/pedometerPage.component'
@@ -16,7 +16,7 @@ import {round} from "react-native-reanimated";
 const Drawer = createDrawerNavigator();
 
 export default function App() {
-    const [weight, setWeight] = useState(null);
+    const [weight, setWeight] = useState(0);
     const [length, setLength] = useState(null);
     const [age, setAge] = useState(null);
     const [gender, setGender] = useState(null);
@@ -123,12 +123,12 @@ export default function App() {
 
     function HomeScreen({navigation}) {
         return (
-            <View style={styles.homeView}>
+            <ScrollView style={styles.homeView}>
                 {/*<SubmenuCard navigation={navigation} item={{title : "Stappenteller", value : 2380,goal: 6000, type :"LOADING_BAR"}}/>*/}
                 <SubmenuCard navigation={() => {navigation.navigate("Home")}} item={{title : "Pedometer", value : steps, goal: 6000, type :"LOADING_BAR"}}/>
                {/* <SubmenuCard navigation={navigation} item={{title : "Food tracker", value : 1500, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>*/}
                 <SubmenuCard navigation={() => {navigation.navigate("Food tracking", {timestamp: timestamp, kcalGoal: kcalGoal, weight: weight, length:length})}} item={{timestamp: timestamp, title : "Food tracker", value : consumedKcal, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>
-            </View>
+            </ScrollView>
         );
     }
 
