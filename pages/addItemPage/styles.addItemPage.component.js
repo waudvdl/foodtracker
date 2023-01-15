@@ -4,8 +4,13 @@ export default StyleSheet.create({
 
     infoText:{
         fontSize: 15,
-        //fontWeight: "bold",
-        //textTransform: "uppercase"
+        fontWeight: "bold",
+        textTransform: "uppercase",
+        color: "#343a40"
+    },
+    foodName:{
+        fontSize: 16,
+        color: "#343a40"
     },
     contWrapper:{
         alignItems: "center",
@@ -35,6 +40,13 @@ export default StyleSheet.create({
         flexDirection: "row",
         marginVertical: 20,
     },
+    sumRow:{
+        display: "flex",
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 8
+    },
     col:{
         marginTop: 10,
         display: "flex",
@@ -42,6 +54,7 @@ export default StyleSheet.create({
         justifyContent: "center",
     },
     inputField: {
+        fontSize: 16,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -49,6 +62,9 @@ export default StyleSheet.create({
         //borderColor: "#111",
         borderBottomWidth: 1,
         borderColor: "#747474",
+        position: "relative",
+        top: -2,
+        color: "#343a40"
     },
     btn:{
         display: "flex",
@@ -59,6 +75,18 @@ export default StyleSheet.create({
         marginVertical: 10,
         elevation: 10,
         borderRadius: 50,
+    },
+    summary:{
+        marginTop: 50,
+        fontSize: 16,
+        color: "#333533",
+        opacity: 0.3,
+        fontWeight: "bold",
+        textTransform : "uppercase",
+        paddingBottom: 5,
+        borderBottomColor: "#333533",
+        borderBottomWidth: 2,
+        marginBottom: 20,
     },
     addBtn:{
         backgroundColor: "#1DC763",

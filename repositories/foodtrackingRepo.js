@@ -33,4 +33,6 @@ export default async function GetBarCodeInfo(barcode){
     //return await res.json();
 }
 
+
+
 //GetBarCodeInfo("099482434182").then(r => console.log(r.body.foods[0].food_name))

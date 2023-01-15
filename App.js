@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useEffect, useState} from "react";
 import AddItemPage from "./pages/addItemPage/addItemPage.component";
 import {round} from "react-native-reanimated";
+import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
 
 const Drawer = createDrawerNavigator();
 
@@ -113,7 +114,7 @@ export default function App() {
                 kcalGoal*=1.1;
             }
             setKcalGoal(kcalGoal.toFixed(0))
-            //alert(kcalGoal.toFixed(0))
+            AsyncStorage.setItem("kcalGoal", kcalGoal.toFixed(0)+"").catch(()=>alert("Could not find calorie goal check settings"))
         }
     },[weight,length,age,gender])
 
@@ -148,7 +149,7 @@ export default function App() {
               <Drawer.Screen
                   name="Food tracking"
                   component={Foodpage}
-                  initialParams={{ users: false }}
+                  initialParams={{ kcalGoal: kcalGoal, weight: weight, length:length }}
               />
               <Drawer.Screen
                   name="Food scanner"

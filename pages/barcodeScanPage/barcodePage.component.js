@@ -3,6 +3,7 @@ import {Alert, Button, Pressable, Text, View} from "react-native";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from "./styles.barcodePage.component";
 import GetBarCodeInfo from "../../repositories/foodtrackingRepo";
+import FetchBarcodeInfo from "../../repositories/FetchBarcodeInfo"
 import AddItemPage from "../addItemPage/addItemPage.component";
 
 
@@ -11,6 +12,7 @@ export default function ScanBarcodePage ({navigation}){
     const [barcode, setBarcode] = useState(null);
     const [hasPermission, setHasPermission] = useState(null);
     const [scannedItemData, setScannedItemData] = useState(null)
+    //const [foodData,setFoodData] = useState(null;)
 
     useEffect(() => {
         const getBarCodeScannerPermissions = async () => {
@@ -23,14 +25,36 @@ export default function ScanBarcodePage ({navigation}){
 
     useEffect(() => {
         if(scanned === true && barcode !== null){
-            FetchBarcodeInfo().then(d => {
+
+            FetchBarcodeInfoFromOpenFoodFacts().then(d => {
                 let keyOnlyArr = Object.keys(d);
-                if(keyOnlyArr.includes("foods")){
-                    setScannedItemData(d);
-                }else{
+                if(keyOnlyArr.includes("products") && d.count !== 0){
+                    let metric = d.products[0].serving_size.substring(d.products[0].serving_quantity.length)
+                    let nutrions = d.products[0].nutriments
+                    let temp = {
+                        name: d.products[0].brands,
+                        quantity: d.products[0].product_quantity,
+                        serving_amount : d.products[0].serving_quantity,
+                        serving_size: d.products[0].serving_size,
+                        nutrion_values: {
+                            total_kcal_serving: (nutrions["energy-kcal_serving"] !== undefined) ? nutrions["energy-kcal_serving"] : 0,
+                            total_carbs_serving: (nutrions["carbohydrates_serving"] !== undefined) ? nutrions["carbohydrates_serving"] : 0,
+                            total_fat_serving: (nutrions["fat_serving"] !== undefined) ? nutrions["fat_serving"] : 0,
+                            total_protein_serving: (nutrions["protein_serving"] !== undefined) ? nutrions["protein_serving"] : 0,
+                            total_salt_serving: (nutrions["salt_serving"] !== undefined) ? nutrions["salt_serving"] : 0,
+                            total_sugar_serving: (nutrions["sugars_serving"] !== undefined) ? nutrions["sugars_serving"] : 0,
+                        },
+                        metric: metric,
+                    }
+                    //console.log(temp)
+                    setScannedItemData(temp)
+                }else if(d.count !== 0){
                     alert("Could not find your scanned product sorry.")
                 }
-            })
+                else{
+                    alert("Something went wrong try again later")
+                }
+            }).catch(()=>{return null});
         }
     }, [barcode, scanned])
 
@@ -39,22 +63,15 @@ export default function ScanBarcodePage ({navigation}){
             createYesNoPopup(scannedItemData);
     }, [scannedItemData])
 
-    function addItemToConsumedList(url){
+    function addItemToConsumedList(){
         navigation.navigate("Add food item", {
-            itemName: scannedItemData.foods[0].food_name+"",
-            amount: scannedItemData.foods[0].serving_qty,
-            metric: scannedItemData.foods[0].serving_unit+"",
-            sugar: scannedItemData.foods[0].nf_sugars,
-            calories: scannedItemData.foods[0].nf_calories,
-            fat : scannedItemData.foods[0].nf_total_fat,
-            carbohydrate: scannedItemData.foods[0].nf_total_carbohydrate
+            foodItem : scannedItemData,
         })
     }
     
-    function createYesNoPopup(d) {
-        //console.log(d)
-        //return null
-        Alert.alert("Add item",`Do you want to add a ${d.foods[0].food_name} ${d.foods[0].brand_name} to your consumed list of today`,[
+    function createYesNoPopup(foodData) {
+        Alert.alert("Add item", `Do you want to add a ${foodData.name} to your daily consumables?`,[
+        //Alert.alert("Add item",`Do you want to add a ${d.foods[0].food_name} ${d.foods[0].brand_name} to your consumed list of today`,[
             {
                 text: "NO",
                 style: "noBtn",
@@ -63,24 +80,22 @@ export default function ScanBarcodePage ({navigation}){
             {
                 text: "YES",
                 style: "yesBtn",
-                onPress: () => addItemToConsumedList()
+                onPress: () => {
+                    setScanned(false);
+                    setBarcode(null);
+                    setScannedItemData(null);
+                    addItemToConsumedList()
+                }
             }
         ])
     }
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
         setBarcode(data)
-        //alert({barcode})
-        /*FetchBarcodeInfo().then(d => {
-            setScannedItemData(d);
-            //createYesNoPopup(d);
-            //alert(`you scanned a ${d.foods[0].food_name+ " "+d.foods[0].brand_name}`);
-        })*/
     };
 
-    async function FetchBarcodeInfo() {
+    async function FetchBarcodeInfoFromNutrionix() {
         if (barcode !== null) {
             //alert({barcode})
             const foodData = await GetBarCodeInfo(barcode);
@@ -95,6 +110,13 @@ export default function ScanBarcodePage ({navigation}){
         /*const foodData = GetBarCodeInfo(barcode).then(d => alert(`You scanned a ${d}`));
         alert(`You scanned a ${foodData}`);
         return foodData;*/
+    }
+    
+    async function FetchBarcodeInfoFromOpenFoodFacts(){
+        if(barcode !== null){
+            const foodData = await FetchBarcodeInfo(barcode)
+            return foodData;
+        }
     }
 
 

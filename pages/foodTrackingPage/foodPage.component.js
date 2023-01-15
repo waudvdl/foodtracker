@@ -1,8 +1,8 @@
-import {Button, Pressable, ScrollView, Text, View} from "react-native"
+import {Button, FlatList, Pressable, ScrollView, Text, View} from "react-native"
 import styles from "./styles.foodPage.component"
 import {useEffect, useState} from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Progress from 'react-native-progress';
 import ProgressCircle from "../../components/progressCircle/progressCircle.component";
 
 export default function Foodpage({navigation, route}) {
@@ -13,38 +13,72 @@ export default function Foodpage({navigation, route}) {
     const [sugar, setSugar] = useState(0);
     const [salt, setSalt] = useState(0);
     const [consumedFoodList, setConsumedFoodList] = useState([]);
+    const [kcalGoal, setKcalGoal] = useState(0)
+    const [weight, setWeight] = useState(0)
 
     useEffect(()=>{
-        const timestamp = route.params.timestamp;
-        async function getDailyFoodInfo(){
-            try {
-                if(timestamp !== null){
-                    const jsonValue = await AsyncStorage.getItem(timestamp + "");
-                    if (jsonValue !== null){
-                        return JSON.parse(jsonValue);
-                    }
+        const unsubscribe = navigation.addListener('focus', () => {
+            setTimeout(()=>{
+                getDailyFoodInfo().then(i =>{
+                    setProteins(parseInt(i.data.proteins));
+                    setKcal(parseInt(i.data.consumedKcal))
+                    setFat(parseInt(i.data.fat))
+                    setCarbohydrates(parseInt(i.data.carbohydrates));
+                    setSugar(parseInt(i.data.sugar));
+                    setSalt(parseInt(i.data.salt));
+                    setConsumedFoodList(i.data.consumedFoodList);
+                    //console.log("foccused")
+                })
+            }, 2000)
+        });
+
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    },[navigation])
+
+    async function getDailyFoodInfo(){
+        let now = new Date();
+        let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        let timestamp = startOfDay / 1000;
+
+        try {
+            if(timestamp !== null){
+                const jsonValue = await AsyncStorage.getItem(timestamp + "");
+                if (jsonValue !== null){
+                    return JSON.parse(jsonValue);
+                }else{
+                    return null
                 }
-            }catch (e) {
-                console.log(e)
-                alert("something went wrong with getting today's food values")
             }
+        }catch (e) {
+            console.log(e)
+            alert("something went wrong with getting today's food values")
+            return null
         }
+    }
+
+    useEffect(()=>{
+        AsyncStorage.getItem("kcalGoal").then(s => {
+            setKcalGoal(parseInt(s))
+        })
+
+        AsyncStorage.getItem("weight").then(w => {
+            setWeight(parseInt(w))
+        })
 
         getDailyFoodInfo().then(i => {
             try{
-                setProteins(i.data.proteins);
-                setKcal(i.data.consumedKcal)
-                setFat(i.data.fat)
-                setCarbohydrates(i.data.carbohydrates);
-                setSugar(i.data.sugar);
-                setSalt(i.data.salt);
+                setProteins(parseInt(i.data.proteins));
+                setKcal(parseInt(i.data.consumedKcal))
+                setFat(parseInt(i.data.fat))
+                setCarbohydrates(parseInt(i.data.carbohydrates));
+                setSugar(parseInt(i.data.sugar));
+                setSalt(parseInt(i.data.salt));
                 setConsumedFoodList(i.data.consumedFoodList);
             }catch (e) {
                 return null
             }
         })
-
-
 
     }, [])
 
@@ -60,14 +94,16 @@ export default function Foodpage({navigation, route}) {
                 <Text style={styles.btnText}>Scan an item</Text>
             </Pressable>
             <View style={styles.statsContainer}>
-                {/*<Progress.Circle size={150} progress={0.4} thickness={7} showsText={true} formatText={()=>{return "40%";}}/>*/}
-                <ProgressCircle curValue={kcal} goal={route.params.kcalGoal} text={"Daily kcal "}/>
-                <ProgressCircle curValue={proteins} goal={Math.floor(route.params.weight*0.8)} text={"Daily grams of protein "}/>
-                <ProgressCircle curValue={fat} goal={Math.floor((route.params.kcalGoal*0.3)/9)} text={"Daily grams of fat"}/>
-                <ProgressCircle curValue={carbohydrates} goal={Math.floor(0.525*route.params.kcalGoal/4)} text={"Daily grams of carbohydrates"}/>
-                <ProgressCircle curValue={sugar} goal={Math.floor(route.params.kcalGoal/40)} text={"Daily grams of sugar"}/>
-                <ProgressCircle curValue={salt} goal={6} text={"Daily grams of salt"}/>
+                <ProgressCircle curValue={kcal} goal={kcalGoal} text={"kcal"}/>
+                <ProgressCircle curValue={proteins} goal={Math.floor(weight*0.8)} text={"grams of proteins"}/>
+                <ProgressCircle curValue={fat} goal={Math.floor((kcalGoal*0.3)/9)} text={"grams of fat"}/>
+                <ProgressCircle curValue={carbohydrates} goal={Math.floor(0.525*kcalGoal/4)} text={"grams of carbohydrates"}/>
+                <ProgressCircle curValue={sugar} goal={Math.floor(kcalGoal/40)} text={"grams of sugar"}/>
+                <ProgressCircle curValue={salt} goal={6} text={"grams of salt"}/>
             </View>
+            {/*<FlatList data={consumedFoodList} renderItem={(foodItem)=> <Text>{foodItem.foodName}</Text>
+            }>
+            </FlatList>*/}
         </ScrollView>
     );
 }
