@@ -9,7 +9,11 @@ export default StyleSheet.create({
     pageWrapper:{
         width:"100%"
     },
-    graph:{
+    chartPlaceholder:{
+        height: 256,
+        width: "100%"
+    },
+    /*graph:{
         display: "flex",
         justifyContent:"center",
         alignItems: "center",
@@ -17,7 +21,7 @@ export default StyleSheet.create({
         height: 200,
         backgroundColor: "#A35",
         borderBottomWidth: 2,
-    },
+    },*/
     scanBtn:{
         display: "flex",
         alignItems: "center",
