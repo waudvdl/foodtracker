@@ -27,7 +27,8 @@ export default StyleSheet.create({
         borderStyle: "solid",
         borderColor: "#D3D3D3",
         borderRadius: 30,
-        paddingVertical: 20
+        paddingVertical: 20,
+        elevation: 5
     },
     qntyCont:{
         display: "flex",

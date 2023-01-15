@@ -6,6 +6,9 @@ export default StyleSheet.create({
         flexDirection:"column",
         //alignItems:"center"
     },
+    pageWrapper:{
+        width:"100%"
+    },
     graph:{
         display: "flex",
         justifyContent:"center",
@@ -39,5 +42,28 @@ export default StyleSheet.create({
         height: "100%",
         marginTop:10,
         marginBottom: 30
+    },
+    foodList:{
+        display: "flex",
+        justifyContent: "center",
+        //alignItems:"center",
+        width: "100%",
+        //backgroundColor: "#A55",
+        //borderWidth: 2,
+        //borderStyle: "solid",
+        //marginBottom: 30,
+    },
+    listItem:{
+        display: "flex",
+        //width: "100%",
+        //backgroundColor: "#5AA",
+        marginBottom: 30,
+        //paddingBottom: 30,
+    },
+    listTitle:{
+        width: "100%",
+        alignItems:"center",
+        justifyContent:"center"
+
     }
 })

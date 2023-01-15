@@ -48,6 +48,7 @@ export default function AddItemPage({route, navigation}) {
                 proteins: protein,
                 fat: fat,
                 sugar: sugar,
+                salt: salt,
                 specific_timestamp: add_timestamp
             }
             consumedList.push(foodItem)
