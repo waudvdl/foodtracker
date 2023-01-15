@@ -156,6 +156,8 @@ export default function Foodpage({navigation, route}) {
     return (
         <SafeAreaView>
                 <FlatList
+                    scrollEnabled={true}
+                    nestedScrollEnabled={false}
                     ListHeaderComponent={
                         <ScrollView style={styles.pageWrapper}>
                             <View style={styles.graph}>
@@ -169,29 +171,6 @@ export default function Foodpage({navigation, route}) {
                                             }
                                         ]
                                     }}
-                                    /*data={{
-                                        labels: ["January", "February", "March", "April", "May", "June"],
-                                        datasets: [
-                                            {
-                                                data: [
-                                                    Math.random() * 100,
-                                                    Math.random() * 100,
-                                                    Math.random() * 100,
-                                                    Math.random() * 100,
-                                                    Math.random() * 100,
-                                                    Math.random() * 100
-                                                ]
-                                            }
-                                        ]
-                                    }}*/
-                                    /*data={{
-                                        labels: [],
-                                        datasets: [
-                                            {
-                                                data: []
-                                            }
-                                        ]
-                                    }}*/
                                     width={Dimensions.get("window").width}
                                     height={300}
                                     verticalLabelRotation={30}
