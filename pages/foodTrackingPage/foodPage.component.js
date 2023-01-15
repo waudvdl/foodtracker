@@ -196,8 +196,11 @@ export default function Foodpage({navigation, route}) {
                                     height={300}
                                     verticalLabelRotation={30}
                                     chartConfig={{
-                                        //backgroundGradientFromOpacity: 0,
-                                        //backgroundGradientToOpacity: 0,
+                                        backgroundColorFrom: "#1A1A1A",
+                                        backgroundGradientFrom: "#1A1A1A",
+                                        backgroundGradientTo: "#1A1A1A",
+                                        backgroundGradientFromOpacity: 0,
+                                        backgroundGradientToOpacity: 0,
                                         decimalPlaces: 0,
                                         color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
                                         strokeWidth: 3, // optional, default 3
