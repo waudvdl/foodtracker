@@ -14,3 +14,13 @@ it("fetchInfo", async  ()=>{
     expect(data).toEqual({count:1, products:[{nutriments:{}}]})
     expect(fetch).toHaveBeenCalledTimes(1);
 })
+
+it("fetchInfoFail" , async ()=>{
+    fetch.mockImplementationOnce(() => Promise.resolve({
+        status : 500,
+        json : () => Promise.resolve({message : "API failure"})
+    }))
+    const data = await fetchBarcodeInfo();
+    expect(data).toEqual(null)
+    expect(fetch).toHaveBeenCalledTimes(1);
+})
