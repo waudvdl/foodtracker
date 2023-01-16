@@ -30,6 +30,9 @@ In the root folder run.
 expo start
 ```
 
+### figma
+[Figma](https://www.figma.com/file/4dEgEBUTni17oX2VaLDrFM/Untitled?node-id=7%3A226)
+
 ## Authors
 waudvdl - Initial work - https://github.com/waudvdl
 
