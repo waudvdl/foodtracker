@@ -6,7 +6,7 @@ export default StyleSheet.create({
         borderWidth: 2,
         borderColor: '#000',
         borderRadius: 50,
-        marginBottom: 16
+        marginBottom: 16,
     },
     contentContainer: {
         display: "flex",
@@ -31,9 +31,8 @@ export default StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
-        right: 50,
+        //right: 50,
         top: 13
-
     },
     moreInfoButtonContainer:{
         display: "flex",

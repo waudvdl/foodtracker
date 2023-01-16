@@ -11,6 +11,12 @@ export default function AddItemPage({route, navigation}) {
     const [fat, setFat] = useState(route.params.foodItem.nutrion_values.total_fat_serving);
     const [sugar, setSugar] = useState(route.params.foodItem.nutrion_values.total_sugar_serving);
     const [salt, setSalt] = useState(route.params.foodItem.nutrion_values.total_salt_serving);
+    const kcal_serving_value = route.params.foodItem.nutrion_values.total_kcal_serving
+    const carbs_serving_value = route.params.foodItem.nutrion_values.total_carbs_serving
+    const protein_serving_value = route.params.foodItem.nutrion_values.total_protein_serving
+    const fat_serving_value = route.params.foodItem.nutrion_values.total_fat_serving
+    const sugar_serving_value = route.params.foodItem.nutrion_values.total_sugar_serving
+    const salt_serving_value = route.params.foodItem.nutrion_values.total_salt_serving
     //const [consumedList, setConsumedList] = useState([])
     const foodName = route.params.foodItem.name;
     const serving_amount = route.params.foodItem.serving_amount;
@@ -22,14 +28,14 @@ export default function AddItemPage({route, navigation}) {
 
 
     useEffect(() =>{
-
         let mult_factor=amount/serving_amount;
-        setKcal(kcal*mult_factor)
-        setCarbs(carbs*mult_factor)
-        setProtein(protein*mult_factor)
-        setFat(fat*mult_factor)
+        //console.log(mult_factor)
+        setKcal(kcal_serving_value*mult_factor)
+        setCarbs(carbs_serving_value*mult_factor)
+        setProtein(protein_serving_value*mult_factor)
+        setFat(fat_serving_value*mult_factor)
         setSugar(sugar*mult_factor)
-        setSalt(salt*mult_factor)
+        setSalt(salt_serving_value*mult_factor)
     }, [amount])
 
     function addToDailyConsumedItems(){
@@ -103,27 +109,27 @@ export default function AddItemPage({route, navigation}) {
                     <View style={styles.summaryCont}>
                         <View style={styles.sumRow}>
                             <Text>Calories</Text>
-                            <Text>{kcal} Kcal</Text>
+                            <Text>{kcal.toFixed(1)} Kcal</Text>
                         </View>
                         <View style={styles.sumRow}>
                             <Text>Proteins</Text>
-                            <Text>{protein} gr</Text>
+                            <Text>{protein.toFixed(1)} gr</Text>
                         </View>
                         <View style={styles.sumRow}>
                             <Text>Carbs</Text>
-                            <Text>{carbs} gr</Text>
+                            <Text>{carbs.toFixed(1)} gr</Text>
                         </View>
                         <View style={styles.sumRow}>
                             <Text>Sugar</Text>
-                            <Text>{sugar} gr</Text>
+                            <Text>{sugar.toFixed(1)} gr</Text>
                         </View>
                         <View style={styles.sumRow}>
                             <Text>Fat</Text>
-                            <Text>{fat} gr</Text>
+                            <Text>{fat.toFixed(1)} gr</Text>
                         </View>
                         <View style={styles.sumRow}>
                             <Text>Salt</Text>
-                            <Text>{salt} gr</Text>
+                            <Text>{salt.toFixed(1)} gr</Text>
                         </View>
                     </View>
                 </View>

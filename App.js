@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import {Button, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
-//import {Pedometer} from 'pages/pedometerPage.component'
+import PedometerPage from "./pages/pedometerPage/pedometerPage.component"
 import Foodpage from "./pages/foodTrackingPage/foodPage.component"
 import BarcodePage from "./pages/barcodeScanPage/barcodePage.component"
 import styles from './styles';
@@ -126,7 +126,7 @@ export default function App() {
         return (
             <ScrollView style={styles.homeView}>
                 {/*<SubmenuCard navigation={navigation} item={{title : "Stappenteller", value : 2380,goal: 6000, type :"LOADING_BAR"}}/>*/}
-                <SubmenuCard navigation={() => {navigation.navigate("Home")}} item={{title : "Pedometer", value : steps, goal: 6000, type :"LOADING_BAR"}}/>
+                <SubmenuCard navigation={() => {navigation.navigate("Pedometer")}} item={{title : "Pedometer", value : 1456, goal: 6000, type :"LOADING_BAR"}}/>
                {/* <SubmenuCard navigation={navigation} item={{title : "Food tracker", value : 1500, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>*/}
                 <SubmenuCard navigation={() => {navigation.navigate("Food tracking", {timestamp: timestamp, kcalGoal: kcalGoal, weight: weight, length:length})}} item={{timestamp: timestamp, title : "Food tracker", value : consumedKcal, goal: kcalGoal, type: "BUTTON", metric:"Kcal"}}/>
             </ScrollView>
@@ -149,17 +149,19 @@ export default function App() {
               <Drawer.Screen
                   name="Food tracking"
                   component={Foodpage}
-                  initialParams={{ kcalGoal: kcalGoal, weight: weight, length:length }}
+                  //initialParams={{ kcalGoal: kcalGoal, weight: weight, length:length }}
               />
               <Drawer.Screen
                   name="Food scanner"
                   component={BarcodePage}
-                  initialParams={{ users: false }}
+              />
+              <Drawer.Screen
+                  name="Pedometer"
+                  component={PedometerPage}
               />
               <Drawer.Screen
                   name="Settings"
                   component={SettingsPage}
-                  initialParams={{ users: false }}
               />
               <Drawer.Screen
                   name="Add food item"

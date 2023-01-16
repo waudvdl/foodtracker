@@ -30,6 +30,15 @@ export default function ScanBarcodePage ({navigation}){
                 let keyOnlyArr = Object.keys(d);
                 if(keyOnlyArr.includes("products") && d.count !== 0){
                     let metric = d.products[0].serving_size.substring(d.products[0].serving_quantity.length)
+                    if(d.products[0].serving_size.includes("ml")){
+                        metric= "ml"
+                    }else if(d.products[0].serving_size.includes("g")){
+                        metric= "gr"
+                    }
+                    else if(d.products[0].serving_size.includes("l")){
+                        metric= "l"
+                    }
+                    console.log(metric)
                     let nutrions = d.products[0].nutriments
                     let temp = {
                         name: d.products[0].brands,
@@ -75,15 +84,26 @@ export default function ScanBarcodePage ({navigation}){
             {
                 text: "NO",
                 style: "noBtn",
-                onPress: ()=> console.log("cancelled food item")
+                onPress: ()=> {
+                    setTimeout(()=>{
+                        setScannedItemData(null)
+                        setScanned(false);
+                        setBarcode(null);
+                        setScannedItemData(null);
+                    }, 1000)
+                    console.log("cancelled food item")
+                }
             },
             {
                 text: "YES",
                 style: "yesBtn",
                 onPress: () => {
-                    setScanned(false);
-                    setBarcode(null);
-                    setScannedItemData(null);
+                    setTimeout(()=>{
+                        setScannedItemData(null)
+                        setScanned(false);
+                        setBarcode(null);
+                        setScannedItemData(null);
+                    }, 1000)
                     addItemToConsumedList()
                 }
             }
@@ -119,7 +139,6 @@ export default function ScanBarcodePage ({navigation}){
         }
     }
 
-
     if (hasPermission === null) {
         return (<Text>Requesting for camera permission</Text>);
     }
@@ -134,7 +153,7 @@ export default function ScanBarcodePage ({navigation}){
                 style={styles.absoluteFillObject}
             />
             {/*{scanned && <Button style={styles.scanAgainBtn} title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}*/}
-            <Pressable style={styles.scanAgainBtn} onPress={() => {setScanned(false); setBarcode(null); setScannedItemData(null);}}><Text>Tap to Scan Again</Text></Pressable>
+            <Pressable style={styles.scanAgainBtn} onPress={() => {setScannedItemData(null);setScanned(false); setBarcode(null); setScannedItemData(null);}}><Text>Tap to Scan Again</Text></Pressable>
         </View>
     )
 }

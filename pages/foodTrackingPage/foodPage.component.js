@@ -1,5 +1,4 @@
 import {
-    Button,
     Dimensions,
     FlatList,
     Pressable,
@@ -7,7 +6,6 @@ import {
     ScrollView,
     Text,
     View,
-    VirtualizedList
 } from "react-native"
 import styles from "./styles.foodPage.component"
 import {useEffect, useState} from "react";
@@ -15,9 +13,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProgressCircle from "../../components/progressCircle/progressCircle.component";
 import FoodItemCard from "../../components/foodItemCard/foodItemCard.component";
 import {LineChart} from "react-native-chart-kit";
-import {setDisabled} from "react-native/Libraries/LogBox/Data/LogBoxData";
 
-export default function Foodpage({navigation, route}) {
+
+
+export default function Foodpage({navigation}) {
     const [proteins, setProteins] = useState(0);
     const [kcal, setKcal] = useState(0);
     const [fat, setFat] = useState(0);
@@ -31,7 +30,6 @@ export default function Foodpage({navigation, route}) {
     const [labelData,setLabelData] = useState([])
     const [showChart, setShowChart] = useState(false)
     //const [chartData, setChartData] = useState({labels:[],datasets:[{data:[]}]})
-
 
     useEffect(()=>{
         const unsubscribe = navigation.addListener('focus', () => {
@@ -90,17 +88,11 @@ export default function Foodpage({navigation, route}) {
     async function getWeekInfo(){
         let labels =[]
         let data = []
-        /*for(let i = 6; i>0; i--){
-            console.log(i)
-        }*/
         for(let i=6; i > -1; i--){
             let now = new Date();
             now.setDate(now.getDate()-i)
             let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            //console.log(date)
-            //console.log(date.getMonth())
             let timestamp = date / 1000;
-
             let res = await getTimestampFoodRecords(timestamp);
             if(res !==null){
                 data.push(parseInt(res.data.consumedKcal))
@@ -109,18 +101,9 @@ export default function Foodpage({navigation, route}) {
             }
             labels.push((date.getMonth()+1)+"/"+date.getDate())
         }
-
-        //console.log(data)
-        //console.log(labels)
         setLabels(labels)
         setLabelData(data)
         setShowChart(true);
-        /*let chart_data = chartData;
-        chart_data.labels = labels;
-        chart_data.datasets[0].data = data;
-        setChartData(chart_data)*/
-        //console.log(labels.)
-        //console.log(data)
     }
 
     useEffect(()=>{
@@ -149,8 +132,6 @@ export default function Foodpage({navigation, route}) {
         getWeekInfo();
 
     }, [])
-
-
 
 
     return (
